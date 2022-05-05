@@ -7,14 +7,21 @@ const cors = require("cors");
 let app = express()
 
 const path = require('path');
+const connectDb = require('./config/db');
 
+//Use cors
+
+//Connect database
+connectDb()
+
+//Configs
 app.use(cors());
-
 // Static folder
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({limit: '50mb', extended: true}))
+app.use(express.json({limit: '50mb'}));
 
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -93,6 +100,11 @@ transporter.verify(function (err, success) {
         console.log("Server is ready to take the emails " + success);
     }
 })
+
+
+//Controller
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/post", require("./routes/post"));
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, ()=> console.log('server has started', PORT))

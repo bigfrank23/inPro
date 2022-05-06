@@ -19,9 +19,8 @@ app.use(cors());
 // Static folder
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-app.use(express.json())
-app.use(express.urlencoded({limit: '50mb', extended: true}))
 app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
